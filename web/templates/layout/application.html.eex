@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script src="/js/phoenix.js"></script>
 
     <title>Hello Phoenix!</title>
     <link rel="stylesheet" href="/css/phoenix.css">
@@ -27,5 +28,22 @@
       </div>
 
     </div> <!-- /container -->
+
+    <script>
+      var socket = new Phoenix.Socket('/ws')
+
+      socket.join('channel', 'chat', {}, function(channel) {
+
+        channel.on('broadcast:message', function(data) {
+          var point = JSON.parse(data.message);
+          var div = document.createElement('div');
+          div.setAttribute('style', 'background:red;position:absolute;width:5px;height:5px;top:'+point.y+'px;left:'+point.x+'px');
+          document.body.appendChild(div);
+        });
+        document.body.onclick = function(e) {
+          channel.send('user:message', JSON.stringify({x:e.clientX, y:e.clientY}) )
+        }
+      });
+    </script>
   </body>
 </html>

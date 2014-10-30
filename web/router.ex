@@ -1,5 +1,8 @@
 defmodule Sprawl.Router do
   use Phoenix.Router
+  use Phoenix.Router.Socket, mount: "/ws"
+
+  channel "channel", App.ChatChannel
 
   scope "/" do
     # Use the default browser stack.
